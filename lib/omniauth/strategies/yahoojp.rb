@@ -45,7 +45,7 @@ module OmniAuth
 
       extra do
         hash = {}
-        hash[:raw_info] = raw_info unless skip_info?
+        # hash[:raw_info] = raw_info unless skip_info?
         prune! hash
       end
 
