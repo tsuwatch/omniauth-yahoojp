@@ -19,7 +19,7 @@ module OmniAuth
         super
       end
 
-      uid { p access_token; raw_info['sub'] }
+      uid { p payload; payload['sub'] }
 
       info do
         prune!({
@@ -45,13 +45,18 @@ module OmniAuth
 
       extra do
         hash = {}
-        # hash[:raw_info] = raw_info unless skip_info?
+        hash[:raw_info] = raw_info unless skip_info?
         prune! hash
+      end
+
+      def payload
+        JSON.parse(Base64.urlsafe_decode64(access_token.params['id_token'].split('.')[1]))
       end
 
       def raw_info
         access_token.options[:mode] = :header
-        @raw_info ||= access_token.get('https://userinfo.yahooapis.jp/yconnect/v2/attribute').parsed
+        @raw_info ||= {}
+        # @raw_info ||= access_token.get('https://userinfo.yahooapis.jp/yconnect/v2/attribute').parsed
       end
 
       def prune!(hash)
