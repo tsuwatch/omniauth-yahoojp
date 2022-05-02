@@ -19,7 +19,7 @@ module OmniAuth
         super
       end
 
-      uid { raw_info['sub'] }
+      uid { p access_token; raw_info['sub'] }
 
       info do
         prune!({
